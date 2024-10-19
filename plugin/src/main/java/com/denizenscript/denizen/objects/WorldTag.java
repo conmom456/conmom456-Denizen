@@ -1029,6 +1029,7 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // <--[mechanism]
         // @object WorldTag
         // @name respawn_dragon
+        // @input None
         // @description
         // Initiates the respawn sequence of the ender dragon as if a player placed 4 end crystals on the portal.
         // Only works if the world is an end world.
@@ -1045,6 +1046,7 @@ public class WorldTag implements ObjectTag, Adjustable, FlaggableObject {
         // <--[mechanism]
         // @object WorldTag
         // @name reset_crystals
+        // @input None
         // @description
         // Resets the end crystals located on the obsidian pillars in this world.
         // Only works if the world is an end world.

@@ -11,9 +11,6 @@ public class ReflectionMappingsInfo {
     public static String MappedRegistry_frozen = "l";
     public static String MappedRegistry_unregisteredIntrusiveHolders = "m";
 
-    // net.minecraft.world.item.crafting.RecipeManager
-    public static String RecipeManager_byName = ERROR_UNKNOWN_TARGET;
-
     // net.minecraft.world.entity.Entity
     public static String Entity_onGround = "aD";
     public static String Entity_DATA_SHARED_FLAGS_ID = "am";
@@ -99,14 +96,6 @@ public class ReflectionMappingsInfo {
     // net.minecraft.network.protocol.game.ClientboundSetPassengersPacket
     public static String ClientboundSetPassengersPacket_passengers = "c";
 
-    // net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket
-    public static String ClientboundTeleportEntityPacket_id = "b";
-    public static String ClientboundTeleportEntityPacket_x = ERROR_UNKNOWN_TARGET;
-    public static String ClientboundTeleportEntityPacket_y = ERROR_UNKNOWN_TARGET;
-    public static String ClientboundTeleportEntityPacket_z = ERROR_UNKNOWN_TARGET;
-    public static String ClientboundTeleportEntityPacket_yRot = ERROR_UNKNOWN_TARGET;
-    public static String ClientboundTeleportEntityPacket_xRot = ERROR_UNKNOWN_TARGET;
-
     // net.minecraft.network.protocol.game.ClientboundLevelChunkPacketData$BlockEntityInfo
     public static String ClientboundLevelChunkPacketDataBlockEntityInfo_packedXZ = "c";
     public static String ClientboundLevelChunkPacketDataBlockEntityInfo_y = "d";
@@ -133,4 +122,7 @@ public class ReflectionMappingsInfo {
 
     // net.minecraft.world.item.AdventureModePredicate
     public static String AdventureModePredicate_predicates = "h";
+
+    // net.minecraft.stats.ServerRecipeBook
+    public static String ServerRecipeBook_addHighlight_method = "e";
 }

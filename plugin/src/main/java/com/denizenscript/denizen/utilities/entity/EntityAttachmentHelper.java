@@ -3,12 +3,16 @@ package com.denizenscript.denizen.utilities.entity;
 import com.denizenscript.denizen.Denizen;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizen.utilities.packets.NetworkInterceptHelper;
+import com.denizenscript.denizencore.utilities.debugging.Debug;
 import org.bukkit.Location;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.UUID;
 
 public class EntityAttachmentHelper {
 
@@ -178,15 +182,19 @@ public class EntityAttachmentHelper {
 
     public static byte adaptedCompressedAngle(byte angle, float offset) {
         float angleF = ((float) angle) * (360F / 256F);
-        angleF += offset;
-        angleF %= 360;
-        if (angleF > 180) {
-            angleF -= 360;
+        return compressAngle(adaptedAngle(angleF, offset));
+    }
+
+    public static float adaptedAngle(float angle, float offset) {
+        angle += offset;
+        angle %= 360;
+        if (angle > 180) {
+            angle -= 360;
         }
-        if (angleF < -180) {
-            angleF += 360;
+        if (angle < -180) {
+            angle += 360;
         }
-        return (byte)((int)(angleF * (256F / 360F)));
+        return angle;
     }
 
     public static byte compressAngle(float angle) {

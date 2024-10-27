@@ -4,8 +4,8 @@ import com.denizenscript.denizen.Denizen;
 import com.denizenscript.denizen.nms.v1_21.ReflectionMappingsInfo;
 import com.denizenscript.denizen.objects.LocationTag;
 import com.denizenscript.denizen.utilities.blocks.FakeBlock;
-import com.denizenscript.denizencore.utilities.debugging.Debug;
 import com.denizenscript.denizencore.utilities.ReflectionHelper;
+import com.denizenscript.denizencore.utilities.debugging.Debug;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
@@ -119,7 +119,7 @@ public class FakeBlockHelper {
             int worldMaxY = world.getMaxHeight();
             int minChunkY = worldMinY >> 4;
             int maxChunkY = worldMaxY >> 4;
-            Registry<Biome> biomeRegistry = ((CraftWorld) world).getHandle().registryAccess().registryOrThrow(Registries.BIOME);
+            Registry<Biome> biomeRegistry = ((CraftWorld) world).getHandle().registryAccess().lookupOrThrow(Registries.BIOME);
             for (int y = minChunkY; y < maxChunkY; y++) {
                 int blockCount = serial.readShort();
                 // reflected constructors as workaround for spigot remapper bug - Mojang "IdMap" became Spigot "IRegistry" but should be "Registry"

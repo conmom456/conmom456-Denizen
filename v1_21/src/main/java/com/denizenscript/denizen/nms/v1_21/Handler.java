@@ -310,7 +310,7 @@ public class Handler extends NMSHandler {
     public List<BiomeNMS> getBiomes(World world) {
         ServerLevel level = ((CraftWorld) world).getHandle();
         ArrayList<BiomeNMS> output = new ArrayList<>();
-        for (ResourceLocation key : level.registryAccess().registryOrThrow(Registries.BIOME).keySet()) {
+        for (ResourceLocation key : level.registryAccess().lookupOrThrow(Registries.BIOME).keySet()) {
             output.add(new BiomeNMSImpl(level, CraftNamespacedKey.fromMinecraft(key)));
         }
         return output;
@@ -330,7 +330,7 @@ public class Handler extends NMSHandler {
         // Based on CraftWorld source
         ServerLevel level = ((CraftWorld) block.getWorld()).getHandle();
         Holder<Biome> biome = level.getNoiseBiome(block.getX() >> 2, block.getY() >> 2, block.getZ() >> 2);
-        ResourceLocation key = level.registryAccess().registryOrThrow(Registries.BIOME).getKey(biome.value());
+        ResourceLocation key = level.registryAccess().lookupOrThrow(Registries.BIOME).getKey(biome.value());
         return new BiomeNMSImpl(level, CraftNamespacedKey.fromMinecraft(key));
     }
 

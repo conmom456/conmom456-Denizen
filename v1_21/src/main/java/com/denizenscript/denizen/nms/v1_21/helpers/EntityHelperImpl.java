@@ -40,6 +40,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.PositionMoveRotation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
@@ -130,17 +131,18 @@ public class EntityHelperImpl extends EntityHelper {
         else {
             source = nmsTarget.level().damageSources().mobAttack(((CraftLivingEntity) attacker).getHandle());
         }
-        if (nmsTarget.isInvulnerableTo(source)) {
+        net.minecraft.world.entity.LivingEntity nmsLivingTarget = nmsTarget instanceof net.minecraft.world.entity.LivingEntity living ? living : null;
+        if (nmsLivingTarget != null ? nmsLivingTarget.isInvulnerableTo(nmsWorld, source) : nmsTarget.isInvulnerableToBase(source)) {
             return 0;
         }
         if (attacker.getEquipment() != null) {
             damage = EnchantmentHelper.modifyDamage(nmsWorld, CraftItemStack.asNMSCopy(attacker.getEquipment().getItemInMainHand()), nmsTarget, source, (float) damage);
         }
-        if (!(nmsTarget instanceof net.minecraft.world.entity.LivingEntity livingTarget)) {
+        if (nmsLivingTarget == null) {
             return damage;
         }
-        damage = CombatRules.getDamageAfterAbsorb(livingTarget, (float) damage, source, (float) livingTarget.getArmorValue(), (float) livingTarget.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
-        float enchantDamageModifier = EnchantmentHelper.getDamageProtection(nmsWorld, livingTarget, source);
+        damage = CombatRules.getDamageAfterAbsorb(nmsLivingTarget, (float) damage, source, (float) nmsLivingTarget.getArmorValue(), (float) nmsLivingTarget.getAttributeValue(Attributes.ARMOR_TOUGHNESS));
+        float enchantDamageModifier = EnchantmentHelper.getDamageProtection(nmsWorld, nmsLivingTarget, source);
         if (enchantDamageModifier > 0) {
             damage = CombatRules.getDamageAfterMagicAbsorb((float) damage, enchantDamageModifier);
         }
@@ -522,7 +524,7 @@ public class EntityHelperImpl extends EntityHelper {
 
     @Override
     public void clientResetLoc(Entity entity) {
-        ClientboundTeleportEntityPacket packet = new ClientboundTeleportEntityPacket(((CraftEntity) entity).getHandle());
+        ClientboundTeleportEntityPacket packet = new ClientboundTeleportEntityPacket(entity.getEntityId(), PositionMoveRotation.of(((CraftEntity) entity).getHandle()), Set.of(), entity.isOnGround());
         for (Player player : getPlayersThatSee(entity)) {
             PacketHelperImpl.send(player, packet);
         }

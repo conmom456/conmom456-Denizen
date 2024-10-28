@@ -132,7 +132,7 @@ public class ItemHelperImpl extends ItemHelper {
         return Ingredient.ofStacks(Arrays.stream(items).map(CraftItemStack::asNMSCopy).toList());
     }
 
-    private static ResourceKey<Recipe<?>> createRecipeKey(String name) {
+    public static ResourceKey<Recipe<?>> createRecipeKey(String name) {
         return ResourceKey.create(Registries.RECIPE, ResourceLocation.fromNamespaceAndPath("denizen", name));
     }
 

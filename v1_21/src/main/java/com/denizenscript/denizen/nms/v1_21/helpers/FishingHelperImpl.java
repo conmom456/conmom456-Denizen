@@ -4,7 +4,6 @@ import com.denizenscript.denizen.nms.interfaces.FishingHelper;
 import com.denizenscript.denizen.nms.v1_21.ReflectionMappingsInfo;
 import com.denizenscript.denizencore.utilities.ReflectionHelper;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -74,7 +73,7 @@ public class FishingHelperImpl implements FishingHelper {
                 .withParameter(LootContextParams.ORIGIN, new Vec3(nmsHook.getX(), nmsHook.getY(), nmsHook.getZ()))
                 .withParameter(LootContextParams.TOOL, new ItemStack(Items.FISHING_ROD))
                 .create(LootContextParamSets.FISHING);
-        List<ItemStack> nmsItems = nmsHook.registryAccess().lookupOrThrow(Registries.LOOT_TABLE).getValueOrThrow(key).getRandomItems(nmsLootParams);
+        List<ItemStack> nmsItems = nmsWorld.getServer().reloadableRegistries().getLootTable(key).getRandomItems(nmsLootParams);
         return nmsItems.get(nmsWorld.random.nextInt(nmsItems.size()));
     }
 

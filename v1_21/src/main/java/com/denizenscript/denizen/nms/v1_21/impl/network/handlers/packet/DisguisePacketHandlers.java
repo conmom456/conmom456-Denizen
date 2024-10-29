@@ -114,7 +114,7 @@ public class DisguisePacketHandlers {
             PositionMoveRotation oldChange = teleportEntityPacket.change();
             return new ClientboundTeleportEntityPacket(
                     teleportEntityPacket.id(),
-                    new PositionMoveRotation(oldChange.position(), oldChange.deltaMovement(), oldChange.xRot(), EntityAttachmentHelper.adaptedAngle(oldChange.yRot(), 180)),
+                    new PositionMoveRotation(oldChange.position(), oldChange.deltaMovement(), EntityAttachmentHelper.normalizeAngle(oldChange.yRot() + 180), oldChange.xRot()),
                     teleportEntityPacket.relatives(),
                     teleportEntityPacket.onGround()
             );
@@ -127,7 +127,7 @@ public class DisguisePacketHandlers {
         if (disguise.as.getBukkitEntityType() == EntityType.ENDER_DRAGON) {
             return new ClientboundMoveEntityPacket.Rot(
                     disguise.entity.getBukkitEntity().getEntityId(),
-                    Mth.packDegrees(EntityAttachmentHelper.adaptedAngle(rotPacket.getyRot(), 180)),
+                    EntityAttachmentHelper.compressAngle(rotPacket.getyRot() + 180),
                     Mth.packDegrees(rotPacket.getxRot()),
                     rotPacket.isOnGround()
             );
@@ -143,7 +143,7 @@ public class DisguisePacketHandlers {
                     posRotPacket.getXa(),
                     posRotPacket.getYa(),
                     posRotPacket.getZa(),
-                    Mth.packDegrees(EntityAttachmentHelper.adaptedAngle(posRotPacket.getyRot(), 180)),
+                    EntityAttachmentHelper.compressAngle(posRotPacket.getyRot() + 180),
                     Mth.packDegrees(posRotPacket.getxRot()),
                     posRotPacket.isOnGround()
             );

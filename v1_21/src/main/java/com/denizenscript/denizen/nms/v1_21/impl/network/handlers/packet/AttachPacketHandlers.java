@@ -79,13 +79,12 @@ public class AttachPacketHandlers {
                             pitch = e.getXRot();
                         }
                         if (att.noPitch) {
-                            Entity attachedEntity = ((CraftEntity) att.attached.getBukkitEntity()).getHandle();
-                            pitch = EntityAttachmentHelper.compressAngle(attachedEntity.getXRot());
+                            pitch = ((CraftEntity) att.attached.getBukkitEntity()).getHandle().getXRot();
                         }
                         float newYaw = yaw;
                         if (isRotate) {
-                            newYaw = EntityAttachmentHelper.adaptedAngle(newYaw, att.positionalOffset.getYaw());
-                            pitch = EntityAttachmentHelper.adaptedAngle(pitch, att.positionalOffset.getPitch());
+                            newYaw = EntityAttachmentHelper.normalizeAngle(newYaw + att.positionalOffset.getYaw());
+                            pitch = EntityAttachmentHelper.normalizeAngle(pitch + att.positionalOffset.getPitch());
                         }
                         Vector goalPosition = att.fixedForOffset(new Vector(e.getX(), e.getY(), e.getZ()), e.getYRot(), e.getXRot());
                         Vector oldPos = att.visiblePositions.get(networkManager.player.getUUID());
@@ -155,7 +154,7 @@ public class AttachPacketHandlers {
                         if (att.noRotate) {
                             yaw = attachedEntity.getYRot();
                         }
-                        yaw = EntityAttachmentHelper.adaptedAngle(yaw, att.positionalOffset.getYaw());
+                        yaw = EntityAttachmentHelper.normalizeAngle(yaw + att.positionalOffset.getYaw());
                     }
                     ClientboundRotateHeadPacket pNew = new ClientboundRotateHeadPacket(attachedEntity, EntityAttachmentHelper.compressAngle(yaw));
                     if (NMSHandler.debugPackets) {
@@ -215,11 +214,10 @@ public class AttachPacketHandlers {
                             pitch = packet.change().xRot();
                         }
                         if (att.noPitch) {
-                            Entity attachedEntity = ((CraftEntity) att.attached.getBukkitEntity()).getHandle();
-                            pitch = EntityAttachmentHelper.compressAngle(attachedEntity.getXRot());
+                            pitch = ((CraftEntity) att.attached.getBukkitEntity()).getHandle().getXRot();
                         }
-                        float newYaw = EntityAttachmentHelper.adaptedAngle(yaw, att.positionalOffset.getYaw());
-                        pitch = EntityAttachmentHelper.adaptedAngle(pitch, att.positionalOffset.getPitch());
+                        float newYaw = EntityAttachmentHelper.normalizeAngle(yaw + att.positionalOffset.getYaw());
+                        pitch = EntityAttachmentHelper.normalizeAngle(pitch + att.positionalOffset.getPitch());
                         pNew = new ClientboundTeleportEntityPacket(
                                 att.attached.getBukkitEntity().getEntityId(),
                                 new PositionMoveRotation(CraftVector.toNMS(resultPos), packet.change().deltaMovement(), newYaw, pitch),

@@ -181,11 +181,10 @@ public class EntityAttachmentHelper {
 
     public static byte adaptedCompressedAngle(byte angle, float offset) {
         float angleF = ((float) angle) * (360F / 256F);
-        return compressAngle(adaptedAngle(angleF, offset));
+        return compressAngle(angleF + offset);
     }
 
-    public static float adaptedAngle(float angle, float offset) {
-        angle += offset;
+    public static float normalizeAngle(float angle) {
         angle %= 360;
         if (angle > 180) {
             angle -= 360;
@@ -197,14 +196,7 @@ public class EntityAttachmentHelper {
     }
 
     public static byte compressAngle(float angle) {
-        angle %= 360;
-        if (angle > 180) {
-            angle -= 360;
-        }
-        if (angle < -180) {
-            angle += 360;
-        }
-        return (byte)((int)(angle * (256F / 360F)));
+        return (byte)((int)(normalizeAngle(angle) * (256F / 360F)));
     }
 
     public static Vector fixOffset(Vector offset, double yaw, double pitch) {

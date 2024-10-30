@@ -563,7 +563,7 @@ public class Utilities {
     }
 
     public static <T> T elementToEnumlike(ElementTag element, Class<T> type) {
-        if (Keyed.class.isAssignableFrom(type)) {
+        if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_21) && Keyed.class.isAssignableFrom(type)) {
             return (T) Bukkit.getRegistry((Class<? extends Keyed>) type).get(parseNamespacedKey(element.asString()));
         }
         return (T) element.asEnum((Class<? extends Enum>) type);

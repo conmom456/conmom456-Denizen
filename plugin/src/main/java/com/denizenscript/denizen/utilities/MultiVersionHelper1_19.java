@@ -1,7 +1,6 @@
 package com.denizenscript.denizen.utilities;
 
 import com.denizenscript.denizen.objects.PlayerTag;
-import com.denizenscript.denizen.objects.properties.entity.EntityColor;
 import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.core.DurationTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
@@ -38,8 +37,8 @@ public class MultiVersionHelper1_19 {
     }
 
     public static void setColor(Entity entity, Mechanism mech) {
-        if (entity instanceof Frog frog) {
-            LegacyNamingHelper.requireType(mech, Frog.Variant.class).ifPresent(frog::setVariant);
+        if (entity instanceof Frog frog && Utilities.requireEnumlike(mech, Frog.Variant.class)) {
+            frog.setVariant(Utilities.elementToEnumlike(mech.getValue(), Frog.Variant.class));
         }
         else if (entity instanceof Boat boat && mech.requireEnum(Boat.Type.class)) {
             // TODO: 1.21.3: Deprecate setting boat types

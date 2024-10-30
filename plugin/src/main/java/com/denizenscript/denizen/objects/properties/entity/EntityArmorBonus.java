@@ -1,5 +1,6 @@
 package com.denizenscript.denizen.objects.properties.entity;
 
+import com.denizenscript.denizen.nms.interfaces.EntityHelper;
 import com.denizenscript.denizen.objects.EntityTag;
 import com.denizenscript.denizencore.objects.core.ElementTag;
 import com.denizenscript.denizencore.objects.Mechanism;
@@ -47,7 +48,7 @@ public class EntityArmorBonus implements Property {
     }
 
     public AttributeInstance getAttribute() {
-        return entity.getLivingEntity().getAttribute(Attribute.GENERIC_ARMOR);
+        return entity.getLivingEntity().getAttribute(EntityHelper.ATTRIBUTE_ARMOR);
     }
 
     public static void register() {

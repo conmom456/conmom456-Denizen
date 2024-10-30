@@ -111,7 +111,7 @@ public class EntityHelperImpl extends EntityHelper {
     @Override
     public double getDamageTo(LivingEntity attacker, Entity target) {
         double damage = 0;
-        AttributeInstance attrib = attacker.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);
+        AttributeInstance attrib = attacker.getAttribute(Attribute.ATTACK_DAMAGE);
         if (attrib != null) {
             damage = attrib.getValue();
         }

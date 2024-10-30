@@ -545,7 +545,6 @@ public class Utilities {
     }
 
     // TODO once 1.21 is the minimum supported version, replace with direct registry-based handling
-    @SuppressWarnings({"unchecked", "DataFlowIssue"})
     public static ListTag listTypes(Class<?> type) {
         if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_21) && Keyed.class.isAssignableFrom(type)) {
             return registryKeys(Bukkit.getRegistry((Class<? extends Keyed>) type));

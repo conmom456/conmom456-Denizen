@@ -247,9 +247,21 @@ public class AbstractListenerPlayInImpl extends ServerGamePacketListenerImpl {
     }
 
     @Override
-    public void handlePickItem(ServerboundPickItemPacket packet) {
+    public void handleAcceptPlayerLoad(ServerboundPlayerLoadedPacket packet) {
         if (handlePacketIn(packet)) { return; }
-        oldListener.handlePickItem(packet);
+        oldListener.handleAcceptPlayerLoad(packet);
+    }
+
+    @Override
+    public void handlePickItemFromBlock(ServerboundPickItemFromBlockPacket packet) {
+        if (handlePacketIn(packet)) { return; }
+        oldListener.handlePickItemFromBlock(packet);
+    }
+
+    @Override
+    public void handlePickItemFromEntity(ServerboundPickItemFromEntityPacket packet) {
+        if (handlePacketIn(packet)) { return; }
+        oldListener.handlePickItemFromEntity(packet);
     }
 
     @Override

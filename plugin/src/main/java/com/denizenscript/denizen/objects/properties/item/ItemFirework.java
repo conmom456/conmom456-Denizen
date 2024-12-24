@@ -82,6 +82,10 @@ public class ItemFirework implements Property {
         ListTag list = new ListTag();
         if (item.getItemMeta() instanceof FireworkMeta) {
             effects = ((FireworkMeta) item.getItemMeta()).getEffects();
+            int power = ((FireworkMeta) item.getItemMeta()).getPower();
+            if (power != 0) {
+                list.add(String.valueOf(power));
+            }
         }
         else {
             effects = Collections.singletonList(((FireworkEffectMeta) item.getItemMeta()).getEffect());

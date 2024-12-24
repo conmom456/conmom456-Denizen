@@ -30,6 +30,7 @@ import com.denizenscript.denizencore.utilities.CoreConfiguration;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizencore.utilities.ReflectionHelper;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
+import com.denizenscript.denizencore.utilities.debugging.DebugInternals;
 import com.google.common.collect.Iterables;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -434,6 +435,6 @@ public class Handler extends NMSHandler {
 
     @Override
     public String updateLegacyName(Class<?> type, String legacyName) {
-        return FieldRename.rename(ApiVersion.FIELD_NAME_PARITY, type.getName().replace('.', '/'), legacyName);
+        return FieldRename.rename(ApiVersion.FIELD_NAME_PARITY, DebugInternals.getFullClassNameOpti(type).replace('.', '/'), legacyName);
     }
 }

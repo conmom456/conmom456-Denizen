@@ -293,6 +293,9 @@ public class Denizen extends JavaPlugin {
                 configOutput.close();
                 reloadConfig();
             }
+            if (Settings.cache_legacySpigotNamesSupport) {
+                Debug.log("Legacy Spigot name support enabled. This may be unnecessary; see config.yml for more information.");
+            }
         }
         catch (Exception e) {
             Debug.echoError(e);
@@ -497,9 +500,6 @@ public class Denizen extends JavaPlugin {
         SecretTag.load();
         if (!CoreConfiguration.defaultDebugMode) {
             getLogger().warning("Debug is disabled in the Denizen config. This is almost always a mistake, and should not be done in the majority of cases.");
-        }
-        if (Settings.cache_legacySpigotNamesSupport) {
-            Debug.log("LEGACY SPIGOT NAMES SUPPORT ENABLED! This should only be used if you have scripts with legacy Spigot names, and should otherwise be disabled; see config.yml for more information.");
         }
     }
 

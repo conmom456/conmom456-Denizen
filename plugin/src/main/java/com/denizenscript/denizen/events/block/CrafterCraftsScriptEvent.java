@@ -22,12 +22,12 @@ public class CrafterCraftsScriptEvent extends BukkitScriptEvent implements Liste
     //
     // @Cancellable true
     //
-    // @Triggers when a crafter crafts an item.
+    // @Triggers when a crafter block crafts an item.
     //
     // @Context
-    // <context.location> returns the LocationTag of the crafter.
-    // <context.item> returns the ItemTag of the item being crafted.
-    // <context.recipe_id> returns the ElementTag of the recipe ID formed.
+    // <context.location> returns the LocationTag of the crafter block.
+    // <context.item> returns the ItemTag being crafted.
+    // <context.recipe_id> returns the ID of the recipe formed.
     //
     // @Determine
     // "ITEM:<ItemTag>" to set the item being crafted. Determinations still consume ingredients.

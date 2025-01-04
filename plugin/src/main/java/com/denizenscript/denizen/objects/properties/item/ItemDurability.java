@@ -6,7 +6,9 @@ import com.denizenscript.denizencore.objects.Mechanism;
 import com.denizenscript.denizencore.objects.ObjectTag;
 import com.denizenscript.denizencore.objects.properties.Property;
 import com.denizenscript.denizencore.tags.Attribute;
+import org.bukkit.event.block.BlockDamageAbortEvent;
 import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class ItemDurability implements Property {
 
@@ -29,7 +31,7 @@ public class ItemDurability implements Property {
     };
 
     public static final String[] handledMechs = new String[] {
-            "durability"
+            "durability", "max_durability"
     };
 
     public ItemDurability(ItemTag _item) {
@@ -67,6 +69,11 @@ public class ItemDurability implements Property {
         // For use with <@link tag ItemTag.durability> and <@link mechanism ItemTag.durability>.
         // -->
         if (attribute.startsWith("max_durability")) {
+            Damageable meta = (Damageable) item.getItemMeta();
+            if (meta.hasMaxDamage()) {
+                return new ElementTag(((Damageable) item.getItemMeta()).getMaxDamage())
+                        .getObjectAttribute(attribute.fulfill(1));
+            }
             return new ElementTag(item.getMaterial().getMaterial().getMaxDurability())
                     .getObjectAttribute(attribute.fulfill(1));
         }
@@ -105,7 +112,14 @@ public class ItemDurability implements Property {
         // <ItemTag.repairable>
         // -->
         if (mechanism.matches("durability") && mechanism.requireInteger()) {
-            item.setDurability((short) mechanism.getValue().asInt());
+            Damageable itemMeta = (Damageable) item.getItemMeta();
+            itemMeta.setDamage(mechanism.getValue().asInt());
+            item.setItemMeta(itemMeta);
+        }
+        else if (mechanism.matches("max_durability") && mechanism.requireInteger()) {
+            Damageable itemMeta = (Damageable) item.getItemMeta();
+            itemMeta.setMaxDamage(mechanism.getValue().asInt());
+            item.setItemMeta(itemMeta);
         }
     }
 }

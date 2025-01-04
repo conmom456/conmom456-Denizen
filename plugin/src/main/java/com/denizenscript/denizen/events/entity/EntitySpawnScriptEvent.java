@@ -13,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
+import org.bukkit.event.entity.TrialSpawnerSpawnEvent;
 
 public class EntitySpawnScriptEvent extends BukkitScriptEvent implements Listener {
 
@@ -88,8 +89,13 @@ public class EntitySpawnScriptEvent extends BukkitScriptEvent implements Listene
         else if (name.equals("reason")) {
             return reason;
         }
-        else if (name.equals("spawner_location") && event instanceof SpawnerSpawnEvent) {
-            return new LocationTag(((SpawnerSpawnEvent) event).getSpawner().getLocation());
+        else if (name.equals("spawner_location")) {
+            if (event instanceof SpawnerSpawnEvent) {
+                return new LocationTag(((SpawnerSpawnEvent) event).getSpawner().getLocation());
+            }
+            else if (event instanceof TrialSpawnerSpawnEvent) {
+                return new LocationTag(((TrialSpawnerSpawnEvent) event).getTrialSpawner().getLocation());
+            }
         }
         return super.getContext(name);
     }

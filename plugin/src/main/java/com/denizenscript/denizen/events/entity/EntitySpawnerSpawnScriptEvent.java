@@ -10,6 +10,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
+import org.bukkit.event.entity.TrialSpawnerSpawnEvent;
 
 public class EntitySpawnerSpawnScriptEvent extends BukkitScriptEvent implements Listener {
 
@@ -78,6 +79,17 @@ public class EntitySpawnerSpawnScriptEvent extends BukkitScriptEvent implements 
         this.entity = new EntityTag(entity);
         location = new LocationTag(event.getLocation());
         spawnerLocation = new LocationTag(event.getSpawner().getLocation());
+        EntityTag.rememberEntity(entity);
+        fire(event);
+        EntityTag.forgetEntity(entity);
+    }
+
+    @EventHandler
+    public void onTrialSpawnerSpawn(TrialSpawnerSpawnEvent event) {
+        Entity entity = event.getEntity();
+        this.entity = new EntityTag(entity);
+        location = new LocationTag(event.getLocation());
+        spawnerLocation = new LocationTag(event.getTrialSpawner().getLocation());
         EntityTag.rememberEntity(entity);
         fire(event);
         EntityTag.forgetEntity(entity);

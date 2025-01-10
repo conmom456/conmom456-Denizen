@@ -142,7 +142,6 @@ public class PropertyRegistry {
         PropertyParser.registerProperty(EntityPotionEffects.class, EntityTag.class);
         PropertyParser.registerProperty(EntityPowered.class, EntityTag.class);
         PropertyParser.registerProperty(EntityProfession.class, EntityTag.class);
-        PropertyParser.registerProperty(EntityPumpkinHead.class, EntityTag.class);
         PropertyParser.registerProperty(EntityRiptide.class, EntityTag.class);
         if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_19)) {
             PropertyParser.registerProperty(EntityRightRotation.class, EntityTag.class);
@@ -157,6 +156,7 @@ public class PropertyRegistry {
             PropertyParser.registerProperty(EntityShadowRadius.class, EntityTag.class);
             PropertyParser.registerProperty(EntityShadowStrength.class, EntityTag.class);
         }
+        PropertyParser.registerProperty(EntitySheared.class, EntityTag.class);
         PropertyParser.registerProperty(EntityShivering.class, EntityTag.class);
         PropertyParser.registerProperty(EntityShotAtAngle.class, EntityTag.class);
         PropertyParser.registerProperty(EntityShulkerPeek.class, EntityTag.class);
@@ -244,9 +244,7 @@ public class PropertyRegistry {
         registerItemProperty(ItemMap.class, "map_id");
         PropertyParser.registerProperty(ItemNBT.class, ItemTag.class);
         registerItemProperty(ItemPatterns.class, "banner_patterns");
-        if (NMSHandler.getVersion().isAtMost(NMSVersion.v1_19)) {
-            registerItemProperty(ItemPotion.class, "potion_contents");
-        }
+        registerItemProperty(ItemPotion.class, "potion_contents");
         PropertyParser.registerProperty(ItemQuantity.class, ItemTag.class);
         PropertyParser.registerProperty(ItemRawNBT.class, ItemTag.class);
         registerItemProperty(ItemRepairCost.class, "repair_cost");

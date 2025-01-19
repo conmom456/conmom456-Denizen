@@ -30,7 +30,7 @@ public class ItemTrim extends ItemProperty<MapTag> {
     // -->
 
     public static boolean describes(ItemTag item) {
-        return item.getItemMeta() instanceof ArmorMeta;
+        return true;
     }
 
     @Override

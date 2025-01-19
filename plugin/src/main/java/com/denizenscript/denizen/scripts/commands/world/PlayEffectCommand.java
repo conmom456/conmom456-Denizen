@@ -18,6 +18,7 @@ import com.denizenscript.denizencore.scripts.ScriptEntry;
 import com.denizenscript.denizencore.scripts.commands.AbstractCommand;
 import com.denizenscript.denizencore.utilities.CoreUtilities;
 import com.denizenscript.denizencore.utilities.debugging.Debug;
+import org.bukkit.Color;
 import org.bukkit.Effect;
 import org.bukkit.Particle;
 import org.bukkit.Vibration;
@@ -84,8 +85,11 @@ public class PlayEffectCommand extends AbstractCommand {
     // - For REDSTONE particles, the input is of format: <size>|<color>, for example: "1.2|red". Color input is any valid ColorTag object.
     // - For DUST_COLOR_TRANSITION particles, the input is of format <size>|<from_color>|<to_color>, for example "1.2|red|blue". Color input is any valid ColorTag object.
     // - For BLOCK_MARKER, FALLING_DUST, BLOCK_CRACK, or BLOCK_DUST particles, the input is any valid MaterialTag, eg "stone".
-    // - For VIBRATION, the input is <duration>|<origin>|<destination> where origin is a LocationTag and destination is either LocationTag or EntityTag, for example "5s|<context.location>|<player>"
+    // - For VIBRATION particles, the input is <duration>|<origin>|<destination> where origin is a LocationTag and destination is either LocationTag or EntityTag, for example "5s|<context.location>|<player>"
     // - For ITEM_CRACK particles, the input is any valid ItemTag, eg "stick".
+    // - For TRAIL particles, the input is of format: <color>|<location>|<duration>, for example "red|<player.cursor_on>|20t". Color input is any valid ColorTag object.
+    // - For ENTITY_EFFECT particles, the input is any valid ColorTag.
+    // - For SHRIEK and SCULK_CHARGE particles, the input is any valid number.
     //
     // Optionally specify a velocity vector for standard particles to move. Note that this ignores the 'data' input if used.
     //
@@ -104,6 +108,24 @@ public class PlayEffectCommand extends AbstractCommand {
     // @Usage
     // Use to play some effects at spawn.
     // - playeffect effect:FIREWORKS_SPARK at:<world[world].spawn_location> visibility:100 quantity:375 data:0 offset:50.0
+    //
+    // @Usage
+    // Use to spawn a cloud of rainbow-colored ENTITY_EFFECT particles around yourself.
+    // - foreach <util.color_names> as:color:
+    //     - playeffect effect:ENTITY_EFFECT at:<player.eye_location> quantity:25 special_data:<[color]>
+    //
+    // @Usage
+    // Use to shoot a laser in to the direction you're looking at.
+    // - playeffect effect:TRAIL at:<player.eye_location> quantity:100 offset:0 special_data:RED|<player.eye_location.ray_trace[default=air]>
+    //
+    // @Usage
+    // Use to spawn a SCULK_CHARGE effect upside down.
+    // - playeffect effect:SCULK_CHARGE at:<player.eye_location.add[0,1,0]> quantity:1 offset:0 special_data:<element[180].to_radians>
+    //
+    // @Usage
+    // Use to play a SHRIEK effect with a 5-second delay.
+    // - playeffect effect:SHRIEK at:<player.eye_location.add[0,1,0]> quantity:1 special_data:100
+    //
     // -->
 
     @Override
@@ -345,6 +367,29 @@ public class PlayEffectCommand extends AbstractCommand {
                             dataObject = new Vibration(origin, destObj, duration.getTicksAsInt());
                         }
                     }
+                    else if (clazz == Particle.Trail.class) {
+                        ListTag dataList = ListTag.valueOf(special_data.asString(), scriptEntry.getContext());
+                        if (dataList.size() != 3) {
+                            Debug.echoError("TargetColor special_data must have 3 list entries for particle: " + particleEffect.name());
+                            return;
+                        }
+                        else {
+                            ColorTag color = dataList.getObject(0).asType(ColorTag.class, scriptEntry.context);
+                            LocationTag target = dataList.getObject(1).asType(LocationTag.class, scriptEntry.context);
+                            DurationTag duration = dataList.getObject(2).asType(DurationTag.class, scriptEntry.context);
+                            dataObject = new Particle.Trail(target, BukkitColorExtensions.getColor(color), duration.getTicksAsInt());
+                        }
+                    }
+                    else if (clazz == Color.class) {
+                        ColorTag color = ColorTag.valueOf(special_data.asString(), scriptEntry.context);
+                        dataObject = BukkitColorExtensions.getColor(color);
+                    }
+                    else if (clazz == Integer.class) {
+                        dataObject = special_data.asInt();
+                    }
+                    else if (clazz == Float.class) {
+                        dataObject = special_data.asFloat();
+                    }
                     else {
                         Debug.echoError("Unknown particle data type: " + clazz.getCanonicalName() + " for particle: " + particleEffect.name());
                         return;
@@ -358,14 +403,14 @@ public class PlayEffectCommand extends AbstractCommand {
                 int quantityInt = quantity.asInt();
                 for (Player player : players) {
                     if (velocity == null) {
-                        player.spawnParticle(particleEffect, location, quantityInt, offset.getX(), offset.getY(), offset.getZ(), data.asDouble(), dataObject);
+                        player.spawnParticle(particleEffect, location, quantityInt, offset.getX(), offset.getY(), offset.getZ(), data.asDouble(), dataObject, true);
                     }
                     else {
                         for (int i = 0; i < quantityInt; i++) {
                             LocationTag singleLocation = location.clone().add((random.nextDouble() - 0.5) * offset.getX(),
                                     (random.nextDouble() - 0.5) * offset.getY(),
                                     (random.nextDouble() - 0.5) * offset.getZ());
-                            player.spawnParticle(particleEffect, singleLocation, 0, velocity.getX(), velocity.getY(), velocity.getZ(), 1, dataObject);
+                            player.spawnParticle(particleEffect, singleLocation, 0, velocity.getX(), velocity.getY(), velocity.getZ(), 1, dataObject, true);
                         }
                     }
                 }
@@ -392,7 +437,7 @@ public class PlayEffectCommand extends AbstractCommand {
                     ItemStack itemStack = iconcrack.getItemStack();
                     Particle particle = Particle.valueOf("ITEM_CRACK");
                     for (Player player : players) {
-                        player.spawnParticle(particle, location, quantity.asInt(), offset.getX(), offset.getY(), offset.getZ(), data.asFloat(), itemStack);
+                        player.spawnParticle(particle, location, quantity.asInt(), offset.getX(), offset.getY(), offset.getZ(), data.asFloat(), itemStack, true);
                     }
                 }
             }

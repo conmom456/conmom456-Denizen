@@ -57,6 +57,7 @@ import org.bukkit.scoreboard.Team;
 import org.bukkit.util.RayTraceResult;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 public class PlayerTag implements ObjectTag, Adjustable, EntityFormObject, FlaggableObject {
 
@@ -2180,6 +2181,10 @@ public class PlayerTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
             }
         });
 
+        registerOnlineOnlyTag(ElementTag.class, "is_transferred", (attribute, object) -> {
+            return new ElementTag(object.getPlayerEntity().isTransferred());
+        });
+
         // <--[tag]
         // @attribute <PlayerTag.calculate_xp>
         // @returns ElementTag(Number)
@@ -2635,7 +2640,6 @@ public class PlayerTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
         }, "is_whitelisted");
 
 
-
         // <--[mechanism]
         // @object PlayerTag
         // @name bed_spawn_location
@@ -2795,6 +2799,19 @@ public class PlayerTag implements ObjectTag, Adjustable, EntityFormObject, Flagg
                 materials.add(material);
             }
             NMSHandler.playerHelper.sendClimbableMaterials(getPlayerEntity(), materials);
+        }
+
+        if (NMSHandler.getVersion().isAtLeast(NMSVersion.v1_21)) {
+            if (mechanism.matches("transfer")) {
+                ListTag list = mechanism.valueAsType(ListTag.class);
+                if (list.size() == 2) {
+                    try {
+                        getPlayerEntity().transfer(list.get(0), Integer.parseInt(list.get(1)));
+                    } catch (Exception e) {
+                        mechanism.echoError("Ran into an error when trying to transfer player! (" + e.getClass() + ")");
+                    }
+                }
+            }
         }
 
         // <--[mechanism]
